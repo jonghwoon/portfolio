@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 1단계: 로컬 Next.js 빌드 테스트를 시작합니다..."
+npm run build
+if [ $? -ne 0 ]; then
+  echo "❌ 로컬 빌드 실패! 푸시를 취소합니다."
+  exit 1
+fi
+
+echo "🐳 2단계: Docker 빌드(GitHub Actions 환경) 테스트를 시작합니다..."
+docker build -t test-build .
+if [ $? -ne 0 ]; then
+  echo "❌ Docker 빌드 실패! 푸시를 취소합니다."
+  exit 1
+fi
+
+echo "✅ 모든 빌드 테스트 통과! 코드를 GitHub에 푸시합니다."

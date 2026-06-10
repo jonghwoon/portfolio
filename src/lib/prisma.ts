@@ -7,13 +7,16 @@ const globalForPrisma = globalThis as unknown as {
 }
 
 function createPrismaClient() {
-  const connectionString = process.env.DATABASE_URL
-  if (!connectionString) {
-    throw new Error('DATABASE_URL environment variable is not set')
+  const connectionString = `postgresql://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.PORTFOLIO_DB}`
+
+  if (!process.env.PORTFOLIO_DB) {
+    console.warn('Database environment variables are not fully set.')
   }
   const pool = new pg.Pool({ connectionString })
   const adapter = new PrismaPg(pool)
-  return new PrismaClient({ adapter } as ConstructorParameters<typeof PrismaClient>[0])
+  return new PrismaClient({ adapter } as ConstructorParameters<
+    typeof PrismaClient
+  >[0])
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient()

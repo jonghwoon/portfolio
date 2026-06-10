@@ -1,7 +1,9 @@
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 # 1. 의존성 설치
 FROM base AS deps
+# Alpine 리눅스에서 Prisma 및 Next.js 네이티브 모듈 빌드에 필요한 시스템 패키지 설치
+RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -17,7 +19,7 @@ RUN npm run build
 # 3. 실행 환경
 FROM base AS runner
 WORKDIR /app
-ENV NODE_ENV production
+ENV NODE_ENV="production"
 COPY --from=builder /app ./
 
 EXPOSE 3000

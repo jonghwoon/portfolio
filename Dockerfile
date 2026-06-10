@@ -13,10 +13,10 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN POSTGRES_USER=dummy POSTGRES_PASSWORD=dummy POSTGRES_HOST=dummy POSTGRES_PORT=5432 POSTGRES_DB=dummy npx prisma generate
+RUN POSTGRES_USER=dummy POSTGRES_PASSWORD=dummy POSTGRES_HOST=localhost POSTGRES_PORT=5432 PORTFOLIO_DB=dummy npx prisma generate
 
-
-RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" POSTGRES_USER=dummy POSTGRES_PASSWORD=dummy POSTGRES_HOST=localhost POSTGRES_PORT=5432 POSTGRES_DB=dummy npm run build
+# Next.js 빌드(정적 분석) 시 Prisma 클라이언트가 환경 변수를 요구하므로 더미 값을 설정합니다.
+RUN POSTGRES_USER=dummy POSTGRES_PASSWORD=dummy POSTGRES_HOST=localhost POSTGRES_PORT=5432 PORTFOLIO_DB=dummy npm run build
 
 # 3. 실행 환경
 FROM base AS runner

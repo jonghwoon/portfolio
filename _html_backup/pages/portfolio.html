@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTFOLIO - LEE JONGHOON</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">LEE JONGHOON</div>
+            <ul class="nav-menu">
+                <li><a href="../index.html" data-i18n="nav.home">Home</a></li>
+                <li><a href="about.html" data-i18n="nav.about">About</a></li>
+                <li><a href="portfolio.html" class="active" data-i18n="nav.portfolio">Portfolio</a></li>
+            </ul>
+            <div class="language-selector">
+                <button data-lang="ja" class="lang-btn active">JP</button>
+                <button data-lang="en" class="lang-btn">EN</button>
+                <button data-lang="ko" class="lang-btn">KR</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="page-header">
+            <h1 class="display-lg" data-i18n="portfolio.title">PORTFOLIO</h1>
+            <p class="title-md" data-i18n="portfolio.subtitle">Engineered projects mapped to metric-driven business outcomes.</p>
+        </section>
+
+        <!-- High-density dynamic grid rendered via portfolio.js -->
+        <section class="portfolio-grid" id="portfolio-list">
+            <!-- Engineered Project Cards are dynamically injected here -->
+        </section>
+    </main>
+
+    <footer>
+        <p class="body-sm">&copy; 2024 LEE JONGHOON. <span data-i18n="footer.rights">All rights reserved.</span></p>
+    </footer>
+
+    <script src="../data/projects.js"></script>
+    <script src="../js/i18n.js"></script>
+    <script src="../js/portfolio.js"></script>
+</body>
+</html>

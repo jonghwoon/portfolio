@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LEE JONGHOON | Portfolio</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="logo">LEE JONGHOON</div>
+        <ul class="nav-menu">
+          <li>
+            <a href="index.html" class="active" data-i18n="nav.home">Home</a>
+          </li>
+          <li><a href="pages/about.html" data-i18n="nav.about">About</a></li>
+          <li>
+            <a href="pages/portfolio.html" data-i18n="nav.portfolio"
+              >Portfolio</a
+            >
+          </li>
+        </ul>
+        <div class="language-selector">
+          <button data-lang="ja" class="lang-btn active">JP</button>
+          <button data-lang="en" class="lang-btn">EN</button>
+          <button data-lang="ko" class="lang-btn">KR</button>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <h1 class="display-xl" data-i18n="hero.title">
+          ENGINEERING<br />PRECISION.
+        </h1>
+        <p class="title-md" data-i18n="hero.subtitle">
+          Driving technical leadership and measurable business outcomes through
+          high-performance web architecture.
+        </p>
+        <a href="pages/portfolio.html" class="btn-primary" data-i18n="hero.cta"
+          >View Results</a
+        >
+      </section>
+
+      <section class="business-metrics">
+        <h2
+          class="display-md"
+          style="margin-bottom: 24px"
+          data-i18n="metrics.title"
+        >
+          Business Impact
+        </h2>
+        <div class="data-grid">
+          <div class="data-cell">
+            <h3 class="display-md metric">40%</h3>
+            <p class="label-uppercase" data-i18n="features.web">
+              Performance Increase
+            </p>
+            <p
+              class="body-sm"
+              style="margin-top: 8px"
+              data-i18n="features.web_desc"
+            >
+              Optimized core web vitals across enterprise platforms.
+            </p>
+          </div>
+          <div class="data-cell">
+            <h3 class="display-md metric">1.2M</h3>
+            <p class="label-uppercase" data-i18n="features.design">
+              Monthly Active Users
+            </p>
+            <p
+              class="body-sm"
+              style="margin-top: 8px"
+              data-i18n="features.design_desc"
+            >
+              Scaled infrastructure to support massive traffic growth.
+            </p>
+          </div>
+          <div class="data-cell">
+            <h3 class="display-md metric">-15%</h3>
+            <p class="label-uppercase" data-i18n="features.responsive">
+              Bounce Rate
+            </p>
+            <p
+              class="body-sm"
+              style="margin-top: 8px"
+              data-i18n="features.responsive_desc"
+            >
+              Redesigned UI/UX systems reducing user drop-off.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/i18n.js"></script>
+  </body>
+</html>

@@ -1,0 +1,93 @@
+'use client'
+
+import Link from 'next/link'
+import Image from 'next/image'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { t } from '@/lib/i18n'
+
+interface Project {
+  id: number
+  title: Record<string, string>
+  description: Record<string, string>
+  features: Record<string, string[]>
+  technologies: string[]
+  tags: string[]
+  emoji?: string | null
+  imageUrl?: string | null
+  date: string
+}
+
+const labels: Record<string, {
+  back: string; overview: string; features: string; tech: string; tags: string
+}> = {
+  ja: { back: '← ポートフォリオに戻る', overview: '概要', features: '機能', tech: '使用技術', tags: 'タグ' },
+  en: { back: '← Back to Portfolio', overview: 'Overview', features: 'Features', tech: 'Technologies', tags: 'Tags' },
+  ko: { back: '← 포트폴리오로 돌아가기', overview: '개요', features: '기능', tech: '사용 기술', tags: '태그' },
+}
+
+export default function ProjectDetailClient({ project }: { project: Project }) {
+  const { lang } = useLanguage()
+  const label = labels[lang]
+  const features = (project.features as Record<string, string[]>)[lang] || (project.features as Record<string, string[]>)['en'] || []
+
+  return (
+    <main>
+      <div className="project-detail animate-fade-in">
+        <Link href="/portfolio" className="project-back-link">
+          {label.back}
+        </Link>
+
+        {project.imageUrl ? (
+          <div style={{ position: 'relative', width: '100%', height: '300px', marginBottom: '32px', overflow: 'hidden' }}>
+            <Image src={project.imageUrl} alt={t(project.title, lang)} fill style={{ objectFit: 'cover' }} />
+          </div>
+        ) : (
+          <div className="project-hero-emoji">{project.emoji || '💼'}</div>
+        )}
+
+        <div className="page-header">
+          <h1 className="display-lg">{t(project.title, lang)}</h1>
+          <p className="body-sm" style={{ marginTop: '8px' }}>{project.date}</p>
+        </div>
+
+        <div className="about-section">
+          <h2>{label.overview}</h2>
+          <p className="body-md">{t(project.description, lang)}</p>
+        </div>
+
+        {features.length > 0 && (
+          <div className="about-section">
+            <h2>{label.features}</h2>
+            <ul className="features-list">
+              {features.map((feature, idx) => (
+                <li key={idx}>{feature}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {project.technologies.length > 0 && (
+          <div className="about-section">
+            <h2>{label.tech}</h2>
+            <div className="tech-list">
+              {project.technologies.map((tech, idx) => (
+                <span key={idx} className="tech-badge">{tech}</span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {project.tags.length > 0 && (
+          <div className="about-section">
+            <h2>{label.tags}</h2>
+            <div className="portfolio-card-tags">
+              {project.tags.map((tag, idx) => (
+                <span key={idx} className="tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </main>
+  )
+}

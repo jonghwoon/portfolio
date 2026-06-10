@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT DETAIL - LEE JONGHOON</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Project Detail Custom Overrides for High-Density Information Layout */
+        .project-header-block {
+            border-bottom: 1px solid var(--hairline);
+            padding-bottom: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .back-link-container {
+            margin-bottom: var(--space-lg);
+        }
+        
+        .back-link {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .back-link:hover {
+            color: var(--primary);
+        }
+        
+        .project-meta-strip {
+            display: flex;
+            gap: var(--space-lg);
+            margin-top: var(--space-md);
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .project-layout-grid {
+            display: grid;
+            grid-template-columns: 8fr 4fr;
+            gap: var(--space-xl);
+            align-items: start;
+        }
+        
+        .project-display-zone {
+            width: 100%;
+            height: 400px;
+            background-color: var(--surface-soft);
+            border: 1px solid var(--hairline);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-display-zone::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+        }
+        
+        .detail-section {
+            border-bottom: 1px solid var(--hairline);
+            padding-bottom: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .detail-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        
+        .detail-section h2 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--brand-accent);
+            margin-bottom: var(--space-md);
+        }
+        
+        .features-matrix-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .features-matrix-list li {
+            position: relative;
+            padding-left: var(--space-lg);
+            font-size: 16px;
+            color: var(--body);
+            line-height: 1.6;
+        }
+        
+        .features-matrix-list li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--brand-accent);
+            font-weight: 700;
+            font-family: monospace;
+        }
+        
+        .tech-spec-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+        
+        .tech-spec-tag {
+            background-color: var(--surface-card);
+            border: 1px solid var(--hairline);
+            color: var(--primary);
+            padding: 6px var(--space-md);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .action-button-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            width: 100%;
+        }
+        
+        .btn-action-full {
+            display: block;
+            width: 100%;
+            background-color: var(--surface-card);
+            color: var(--primary);
+            border: 1px solid var(--hairline);
+            padding: var(--space-md);
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-action-full:hover {
+            border-color: var(--primary);
+            background-color: var(--canvas);
+        }
+        
+        .btn-action-accent {
+            display: block;
+            width: 100%;
+            background-color: var(--brand-accent);
+            color: var(--white);
+            border: 1px solid var(--brand-accent);
+            padding: var(--space-md);
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+        
+        .btn-action-accent:hover {
+            background-color: #054291;
+            border-color: #054291;
+        }
+
+        @media (max-width: 768px) {
+            .project-layout-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-xl);
+            }
+            .project-display-zone {
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">LEE JONGHOON</div>
+            <ul class="nav-menu">
+                <li><a href="../index.html" data-i18n="nav.home">Home</a></li>
+                <li><a href="about.html" data-i18n="nav.about">About</a></li>
+                <li><a href="portfolio.html" class="active" data-i18n="nav.portfolio">Portfolio</a></li>
+            </ul>
+            <div class="language-selector">
+                <button data-lang="ja" class="lang-btn active">JP</button>
+                <button data-lang="en" class="lang-btn">EN</button>
+                <button data-lang="ko" class="lang-btn">KR</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="project-detail-container" id="project-detail">
+            <!-- Header zone matching precise structural layout -->
+            <div class="project-header-block">
+                <div class="back-link-container">
+                    <a href="portfolio.html" class="back-link" data-i18n="project.back">← RETURN TO MATRIX</a>
+                </div>
+                <h1 class="display-lg" id="project-title">LOADING SPECIFICATION...</h1>
+                <div class="project-meta-strip">
+                    <span id="project-date">—</span>
+                    <span id="project-tags">—</span>
+                </div>
+            </div>
+
+            <!-- Main High-Density Split View Layout -->
+            <div class="project-layout-grid">
+                <!-- Left Core Data Column -->
+                <div class="project-core-column">
+                    <div class="project-display-zone" id="project-image">
+                        <!-- Instantiated asynchronously via JavaScript -->
+                    </div>
+
+                    <div class="detail-section">
+                        <h2 data-i18n="project.overview">System Overview</h2>
+                        <p class="body-md" id="project-description" style="color: var(--body); font-weight: 400;"></p>
+                    </div>
+
+                    <div class="detail-section">
+                        <h2 data-i18n="project.features">Key Capabilities</h2>
+                        <ul class="features-matrix-list" id="project-features">
+                            <!-- Injected dynamically -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Side Parameter Specification Column -->
+                <div class="project-spec-sidebar">
+                    <div class="detail-section" style="border-bottom: none; padding-bottom: 0;">
+                        <h2 data-i18n="project.tech">Technical Stack</h2>
+                        <div class="tech-spec-wrapper" id="project-tech" style="margin-bottom: var(--space-xl);">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="detail-section" style="border-bottom: none; padding-bottom: 0;">
+                        <h2 data-i18n="project.links">Deployment Execution</h2>
+                        <div class="action-button-group" id="project-links">
+                            <!-- Injected dynamically with premium sharp full-width triggers -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p class="body-sm">&copy; 2024 LEE JONGHOON. <span data-i18n="footer.rights">All rights reserved.</span></p>
+    </footer>
+
+    <script src="../data/projects.js"></script>
+    <script src="../js/i18n.js"></script>
+    <script src="../js/project-detail.js"></script>
+</body>
+</html>

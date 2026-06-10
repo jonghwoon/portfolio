@@ -1,0 +1,431 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+
+:root {
+  /* Colors - Brand Identity */
+  --primary: #ffffff;
+  --brand-accent: #0653b6;
+  --canvas: #000000;
+  --surface-soft: #0d0d0d;
+  --surface-card: #1a1a1a;
+  --surface-elevated: #262626;
+  --hairline: #3c3c3c;
+  --on-dark: #ffffff;
+  --body: #bbbbbb;
+  --muted: #7e7e7e;
+
+  /* Shapes */
+  --rounded-none: 0px;
+  --rounded-full: 9999px;
+
+  /* Spacing (Base: 4px) */
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 48px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family:
+    "Pretendard",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--body);
+  line-height: 1.5;
+  font-size: 16px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography Hierarchy */
+h1,
+h2,
+h3,
+h4 {
+  color: var(--on-dark);
+  letter-spacing: -0.5px;
+}
+.display-xl {
+  font-size: 80px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.display-lg {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.05;
+}
+.display-md {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.title-lg {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.title-md {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--body);
+}
+.label-uppercase {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.body-md {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.body-sm {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+  padding: var(--space-md) 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: var(--space-lg);
+}
+
+.nav-menu a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+  color: var(--primary);
+}
+
+.language-selector {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.lang-btn {
+  padding: 2px 6px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+.lang-btn.active,
+.lang-btn:hover {
+  color: var(--primary);
+}
+
+/* Main Layout */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.page-header {
+  margin-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: var(--space-lg);
+}
+
+.page-header h1 {
+  margin-bottom: var(--space-sm);
+}
+
+/* Grid & Layout System */
+.data-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1px;
+  background-color: var(--hairline);
+  border: 1px solid var(--hairline);
+  margin-bottom: var(--space-xl);
+}
+
+.data-cell {
+  background-color: var(--surface-soft);
+  padding: var(--space-lg);
+}
+
+.data-cell .metric {
+  color: var(--brand-accent);
+  margin-bottom: var(--space-sm);
+}
+
+/* About Page Specific Layout */
+.about-grid {
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.profile-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.profile-placeholder {
+  width: 180px;
+  height: 180px;
+  border-radius: var(--rounded-full);
+  border: 1px dashed var(--hairline);
+  position: relative;
+  background-color: var(--surface-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+.profile-placeholder::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(60, 60, 60, 0.4);
+  top: 50%;
+  left: 0;
+}
+
+.profile-placeholder::after {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  background-color: rgba(60, 60, 60, 0.4);
+  left: 50%;
+  top: 0;
+}
+
+.profile-text {
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.about-section {
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.about-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.about-section h2 {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--brand-accent);
+  margin-bottom: var(--space-md);
+}
+
+.skills-matrix {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-sm);
+}
+
+.skill-tag {
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary);
+  text-align: center;
+}
+
+.experience-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.experience-node {
+  display: grid;
+  grid-template-columns: 3fr 9fr;
+  gap: var(--space-md);
+}
+
+.exp-period {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand-accent);
+}
+
+.exp-detail h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+/* Portfolio Page Specific Layout */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--space-lg);
+}
+
+.portfolio-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--rounded-none);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.portfolio-card:hover {
+  border-color: var(--brand-accent);
+}
+
+.portfolio-card-image {
+  height: 120px;
+  background-color: var(--surface-soft);
+  border-bottom: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+.portfolio-card-content {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.portfolio-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.portfolio-card-description {
+  font-size: 14px;
+  color: var(--body);
+  margin-bottom: var(--space-md);
+  flex-grow: 1;
+}
+
+.portfolio-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: var(--space-lg);
+}
+
+.tag {
+  background-color: var(--surface-soft);
+  border: 1px solid var(--hairline);
+  color: var(--brand-accent);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px var(--space-sm);
+}
+
+.portfolio-card-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.portfolio-card-link:hover {
+  color: var(--brand-accent);
+}
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--hairline);
+  background-color: var(--canvas);
+  padding: var(--space-xl) 0;
+  text-align: center;
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+  .experience-node {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .nav-container {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+}

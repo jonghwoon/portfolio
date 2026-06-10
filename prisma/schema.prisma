@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HomeContent {
+  id           Int      @id @default(1)
+  heroTitle    Json
+  heroSubtitle Json
+  heroCta      Json
+  metrics      Json
+  updatedAt    DateTime @updatedAt
+}
+
+model Profile {
+  id          Int      @id @default(1)
+  photoUrl    String?
+  statement   Json
+  skills      String[]
+  experiences Json
+  stats       Json
+  updatedAt   DateTime @updatedAt
+}
+
+model Project {
+  id           Int      @id @default(autoincrement())
+  title        Json
+  description  Json
+  features     Json
+  technologies String[]
+  tags         String[]
+  emoji        String?
+  imageUrl     String?
+  date         String
+  order        Int      @default(0)
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

@@ -16,6 +16,7 @@ COPY . .
 RUN POSTGRES_USER=dummy POSTGRES_PASSWORD=dummy POSTGRES_HOST=dummy POSTGRES_PORT=5432 POSTGRES_DB=dummy npx prisma generate
 
 
+RUN POSTGRES_USER=dummy POSTGRES_PASSWORD=dummy POSTGRES_HOST=localhost POSTGRES_PORT=5432 POSTGRES_DB=dummy npm run build
 
 # 3. 실행 환경
 FROM base AS runner

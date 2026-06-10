@@ -14,15 +14,17 @@ interface Project {
   tags: string[]
   emoji?: string | null
   imageUrl?: string | null
+  demoLink?: string | null
+  githubLink?: string | null
   date: string
 }
 
 const labels: Record<string, {
-  back: string; overview: string; features: string; tech: string; tags: string
+  back: string; overview: string; features: string; tech: string; tags: string; demo: string; github: string
 }> = {
-  ja: { back: '← ポートフォリオに戻る', overview: '概要', features: '機能', tech: '使用技術', tags: 'タグ' },
-  en: { back: '← Back to Portfolio', overview: 'Overview', features: 'Features', tech: 'Technologies', tags: 'Tags' },
-  ko: { back: '← 포트폴리오로 돌아가기', overview: '개요', features: '기능', tech: '사용 기술', tags: '태그' },
+  ja: { back: '← ポートフォリオに戻る', overview: '概要', features: '機能', tech: '使用技術', tags: 'タグ', demo: 'デモを見る', github: 'GitHubを見る' },
+  en: { back: '← Back to Portfolio', overview: 'Overview', features: 'Features', tech: 'Technologies', tags: 'Tags', demo: 'Live Demo', github: 'View GitHub' },
+  ko: { back: '← 포트폴리오로 돌아가기', overview: '개요', features: '기능', tech: '사용 기술', tags: '태그', demo: '데모 보기', github: 'GitHub 보기' },
 }
 
 export default function ProjectDetailClient({ project }: { project: Project }) {
@@ -48,6 +50,20 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
         <div className="page-header">
           <h1 className="display-lg">{t(project.title, lang)}</h1>
           <p className="body-sm" style={{ marginTop: '8px' }}>{project.date}</p>
+          {(project.demoLink || project.githubLink) && (
+            <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+              {project.demoLink && (
+                <a href={project.demoLink} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: '10px 24px' }}>
+                  {label.demo}
+                </a>
+              )}
+              {project.githubLink && (
+                <a href={project.githubLink} target="_blank" rel="noopener noreferrer" className="btn-secondary" style={{ padding: '10px 24px' }}>
+                  {label.github}
+                </a>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="about-section">

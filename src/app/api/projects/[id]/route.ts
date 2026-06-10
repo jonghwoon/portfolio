@@ -40,6 +40,8 @@ export async function PUT(
         tags: data.tags || [],
         emoji: data.emoji,
         imageUrl: data.imageUrl,
+        demoLink: data.demoLink,
+        githubLink: data.githubLink,
         date: data.date,
         order: data.order,
         published: data.published ?? true,

@@ -48,6 +48,8 @@ model Project {
   tags         String[]
   emoji        String?
   imageUrl     String?
+  demoLink     String?
+  githubLink   String?
   date         String
   order        Int      @default(0)
   published    Boolean  @default(true)

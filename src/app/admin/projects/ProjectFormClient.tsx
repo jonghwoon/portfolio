@@ -20,6 +20,8 @@ interface ProjectData {
   tags: string[]
   emoji: string
   imageUrl?: string | null
+  demoLink?: string | null
+  githubLink?: string | null
   date: string
   published: boolean
   order: number
@@ -33,6 +35,8 @@ const emptyProject: ProjectData = {
   tags: [],
   emoji: '💼',
   imageUrl: null,
+  demoLink: '',
+  githubLink: '',
   date: '',
   published: true,
   order: 0,
@@ -225,6 +229,22 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
 
         {/* Right sidebar */}
         <div>
+          <div className="admin-card">
+            <div className="admin-card-title">Links</div>
+            <div className="form-group">
+              <label className="form-label">Demo Link</label>
+              <input className="form-input" value={data.demoLink || ''}
+                onChange={e => setData(prev => ({ ...prev, demoLink: e.target.value }))}
+                placeholder="https://..." />
+            </div>
+            <div className="form-group">
+              <label className="form-label">GitHub Link</label>
+              <input className="form-input" value={data.githubLink || ''}
+                onChange={e => setData(prev => ({ ...prev, githubLink: e.target.value }))}
+                placeholder="https://github.com/..." />
+            </div>
+          </div>
+
           <div className="admin-card">
             <div className="admin-card-title">Settings</div>
             <div className="form-group">

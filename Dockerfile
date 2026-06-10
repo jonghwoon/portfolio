@@ -18,7 +18,10 @@ RUN POSTGRES_USER=dummy POSTGRES_PASSWORD=dummy POSTGRES_HOST=dummy POSTGRES_POR
 # Next.js 빌드(정적 분석) 시 Prisma 클라이언트가 환경 변수를 요구하므로 더미 값을 설정합니다.
 ENV POSTGRES_USER="dummy" POSTGRES_PASSWORD="dummy" POSTGRES_HOST="localhost" POSTGRES_PORT="5432" POSTGRES_DB="dummy"
 
-RUN npm run build
+# Next.js 빌드(정적 분석) 시 Prisma가 환경 변수를 요구하므로 RUN 명령어에 직접 더미 값을 주입합니다.
+# ENV로 설정 시 발생하는 보안 경고(SecretsUsedInArgOrEnv)도 해결됩니다.
+RUN POSTGRES_USER=dummy POSTGRES_PASSWORD=dummy POSTGRES_HOST=localhost POSTGRES_PORT=5432 POSTGRES_DB=dummy npm run build
+
 
 # 3. 실행 환경
 FROM base AS runner

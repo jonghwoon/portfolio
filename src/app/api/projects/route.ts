@@ -32,6 +32,8 @@ export async function POST(request: NextRequest) {
         tags: data.tags || [],
         emoji: data.emoji,
         imageUrl: data.imageUrl,
+        demoLink: data.demoLink,
+        githubLink: data.githubLink,
         date: data.date,
         order: nextOrder,
         published: data.published ?? true,

@@ -68,5 +68,8 @@ jobs:
             # 새 컨테이너 내부에서 DB 마이그레이션 실행
             docker exec portfolio-main npm run db:migrate
 
+            # 새 컨테이너 내부에서 DB 시드 데이터(관리자 계정 등) 주입 실행
+            docker exec portfolio-main npm run db:seed
+
             # 안 쓰는 도커 이미지 정리 (디스크 용량 확보)
             docker image prune -f

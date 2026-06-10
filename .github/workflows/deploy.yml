@@ -59,8 +59,8 @@ jobs:
             docker rm portfolio-main || true
 
             # 새 컨테이너 실행 (호스트의 3000번 포트로 연결)
-            # --add-host 옵션을 넣어 도커 컨테이너 안에서 dev-postgres-host를 호스트 서버로 인식하게 합니다.
-            docker run -d --name portfolio-main -p 3000:8080 --add-host=dev-postgres-host:host-gateway --env-file /home/ubuntu/deploy/.env $IMAGE_URL
+            # --link 옵션을 사용하여 postgres-db 컨테이너를 dev-postgres-host라는 이름으로 직접 연결합니다.
+            docker run -d --name portfolio-main -p 3000:8080 --link postgres-db:dev-postgres-host --env-file /home/ubuntu/deploy/.env $IMAGE_URL
 
             # 새 컨테이너 내부에서 DB 마이그레이션 실행
             docker exec portfolio-main npm run db:migrate

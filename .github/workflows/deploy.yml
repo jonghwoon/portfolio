@@ -60,7 +60,7 @@ jobs:
 
             # 새 컨테이너 실행 (호스트의 3000번 포트로 연결)
             # --add-host 옵션을 넣어 도커 컨테이너 안에서 호스트 서버의 PostgreSQL(localhost)에 접근할 수 있게 합니다.
-            docker run -d --name portfolio-main -p 3000:3000 --add-host=host.docker.internal:host-gateway --env-file /home/ubuntu/deploy/.env $IMAGE_URL
+            docker run -d --name portfolio-main -p 3000:80 --add-host=host.docker.internal:host-gateway --env-file /home/ubuntu/deploy/.env $IMAGE_URL
 
             # 새 컨테이너 내부에서 DB 마이그레이션 실행
             docker exec portfolio-main npm run db:migrate

@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import TechStackInput from '@/components/admin/TechStackInput'
 
 const LANGS = ['ja', 'en', 'ko'] as const
 type Lang = typeof LANGS[number]
@@ -62,7 +63,6 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
   const [activeLang, setActiveLang] = useState<Lang>('ja')
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
-  const [newTech, setNewTech] = useState('')
   const [newTag, setNewTag] = useState('')
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -85,12 +85,6 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
       setMessage({ type: 'error', text: 'Image upload failed' })
     }
     setUploading(false)
-  }
-
-  const addTech = () => {
-    if (!newTech.trim()) return
-    setData(prev => ({ ...prev, technologies: [...prev.technologies, newTech.trim()] }))
-    setNewTech('')
   }
 
   const addTag = () => {
@@ -193,19 +187,10 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
           {/* Technologies */}
           <div className="admin-card">
             <div className="admin-card-title">Technologies</div>
-            <div className="tag-input-wrapper">
-              {data.technologies.map((tech, i) => (
-                <span key={i} className="tag-chip">
-                  {tech}
-                  <button className="tag-chip-remove"
-                    onClick={() => setData(prev => ({ ...prev, technologies: prev.technologies.filter((_, j) => j !== i) }))}>×</button>
-                </span>
-              ))}
-              <input className="tag-input-field" value={newTech}
-                onChange={e => setNewTech(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addTech() } }}
-                placeholder="React, Node.js, ..." />
-            </div>
+            <TechStackInput
+              value={data.technologies}
+              onChange={techs => setData(prev => ({ ...prev, technologies: techs }))}
+            />
           </div>
 
           {/* Tags */}

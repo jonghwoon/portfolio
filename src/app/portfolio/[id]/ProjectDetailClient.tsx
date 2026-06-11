@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import TechTag from '@/components/TechTag'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { t } from '@/lib/i18n'
 
@@ -29,8 +30,8 @@ const labels: Record<string, {
 
 export default function ProjectDetailClient({ project }: { project: Project }) {
   const { lang } = useLanguage()
-  const label = labels[lang]
-  const features = (project.features as Record<string, string[]>)[lang] || (project.features as Record<string, string[]>)['en'] || []
+  const label = labels[lang] || labels['en']
+  const features = (project.features as Record<string, string[]>)?.[lang] || (project.features as Record<string, string[]>)?.['en'] || []
 
   return (
     <main>
@@ -87,7 +88,7 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
             <h2>{label.tech}</h2>
             <div className="tech-list">
               {project.technologies.map((tech, idx) => (
-                <span key={idx} className="tech-badge">{tech}</span>
+                <TechTag key={idx} name={tech} />
               ))}
             </div>
           </div>

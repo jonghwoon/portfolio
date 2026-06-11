@@ -30,6 +30,8 @@ export async function PUT(
     const { id } = await params
     const data = await request.json()
 
+    const order = Math.max(1, parseInt(data.order) || 1)
+
     const project = await prisma.project.update({
       where: { id: parseInt(id) },
       data: {
@@ -43,7 +45,7 @@ export async function PUT(
         demoLink: data.demoLink,
         githubLink: data.githubLink,
         date: data.date,
-        order: data.order,
+        order,
         published: data.published ?? true,
       },
     })

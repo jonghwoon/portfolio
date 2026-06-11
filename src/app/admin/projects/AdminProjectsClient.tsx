@@ -18,6 +18,57 @@ export default function AdminProjectsClient({ projects: initialProjects }: { pro
   const router = useRouter()
   const [projects, setProjects] = useState<Project[]>(initialProjects as Project[])
   const [deleting, setDeleting] = useState<number | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const sortedProjects = [...projects].sort((a, b) => a.order - b.order || a.id - b.id)
+
+  const handleReorder = async (projectId: number, direction: 'up' | 'down') => {
+    if (isLoading) return
+
+    const index = sortedProjects.findIndex(p => p.id === projectId)
+    if (index === -1) return
+
+    const newIndex = direction === 'up' ? index - 1 : index + 1
+    if (newIndex < 0 || newIndex >= sortedProjects.length) return
+
+    setIsLoading(true)
+    const current = sortedProjects[index]
+    const target = sortedProjects[newIndex]
+
+    console.log(`Reordering: ${direction} | Current:`, current, '| Target:', target)
+
+    try {
+      const res1 = await fetch(`/api/projects/${current.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...current, order: target.order }),
+      })
+      const res2 = await fetch(`/api/projects/${target.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...target, order: current.order }),
+      })
+
+      console.log('Responses:', res1.status, res2.status)
+      if (!res1.ok || !res2.ok) {
+        console.error('API error:', res1.statusText, res2.statusText)
+        setIsLoading(false)
+        return
+      }
+
+      const updatedProjects = projects.map(p =>
+        p.id === current.id ? { ...p, order: target.order } :
+        p.id === target.id ? { ...p, order: current.order } :
+        p
+      )
+      console.log('Updated projects:', updatedProjects)
+      setProjects(updatedProjects)
+    } catch (error) {
+      console.error('Failed to reorder:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this project?')) return
@@ -55,9 +106,9 @@ export default function AdminProjectsClient({ projects: initialProjects }: { pro
           </tr>
         </thead>
         <tbody>
-          {projects.map((project) => (
+          {sortedProjects.map((project, index) => (
             <tr key={project.id}>
-              <td style={{ color: 'var(--muted)', width: '40px' }}>{project.order}</td>
+              <td style={{ color: 'var(--muted)', width: '40px' }}>{index + 1}</td>
               <td>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span style={{ fontSize: '20px' }}>{project.emoji || '💼'}</span>
@@ -85,22 +136,40 @@ export default function AdminProjectsClient({ projects: initialProjects }: { pro
               </td>
               <td>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                  <Link href={`/admin/projects/${project.id}`} className="btn-admin-secondary" style={{ fontSize: '12px', padding: '5px 12px' }}>
+                  <Link href={`/admin/projects/${project.id}`} className="btn-admin-secondary" style={{ fontSize: '12px', padding: '5px 12px', pointerEvents: isLoading ? 'none' : 'auto', opacity: isLoading ? 0.5 : 1 }}>
                     Edit
                   </Link>
                   <button
                     className="btn-danger"
                     style={{ fontSize: '12px', padding: '5px 12px' }}
                     onClick={() => handleDelete(project.id)}
-                    disabled={deleting === project.id}
+                    disabled={deleting === project.id || isLoading}
                   >
                     {deleting === project.id ? <span className="spinner" style={{ width: '12px', height: '12px' }} /> : 'Delete'}
+                  </button>
+                  <button
+                    className="btn-admin-secondary"
+                    style={{ fontSize: '12px', padding: '5px 8px', minWidth: '32px' }}
+                    onClick={() => handleReorder(project.id, 'up')}
+                    disabled={isLoading || index === 0}
+                    title="Move up"
+                  >
+                    {isLoading ? <span className="spinner" style={{ width: '10px', height: '10px' }} /> : '↑'}
+                  </button>
+                  <button
+                    className="btn-admin-secondary"
+                    style={{ fontSize: '12px', padding: '5px 8px', minWidth: '32px' }}
+                    onClick={() => handleReorder(project.id, 'down')}
+                    disabled={isLoading || index === sortedProjects.length - 1}
+                    title="Move down"
+                  >
+                    {isLoading ? <span className="spinner" style={{ width: '10px', height: '10px' }} /> : '↓'}
                   </button>
                 </div>
               </td>
             </tr>
           ))}
-          {projects.length === 0 && (
+          {sortedProjects.length === 0 && (
             <tr>
               <td colSpan={6} style={{ textAlign: 'center', padding: '48px', color: 'var(--muted)' }}>
                 No projects yet. <Link href="/admin/projects/new" style={{ color: 'var(--brand-accent-light)' }}>Add one →</Link>

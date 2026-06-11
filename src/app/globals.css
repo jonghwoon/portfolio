@@ -1430,3 +1430,65 @@ footer .footer-inner {
   color: var(--brand-accent);
   flex-shrink: 0;
 }
+
+/* Cropper Modal */
+.cropper-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.cropper-modal {
+  background: var(--surface);
+  border-radius: var(--rounded-lg);
+  width: 100%;
+  max-width: 600px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cropper-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cropper-header h3 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 18px;
+}
+
+.cropper-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: #333;
+}
+
+.cropper-controls {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.zoom-range {
+  width: 50%;
+}
+
+.cropper-footer {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
+import ImageUploadWithCrop from '@/components/admin/ImageUploadWithCrop'
 
 const LANGS = ['ja', 'en', 'ko'] as const
 type Lang = typeof LANGS[number]
@@ -40,10 +41,8 @@ export default function AdminAboutPage() {
   const [profile, setProfile] = useState<ProfileData>(defaultProfile)
   const [activeLang, setActiveLang] = useState<Lang>('ja')
   const [saving, setSaving] = useState(false)
-  const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [newSkill, setNewSkill] = useState('')
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const fetchProfile = useCallback(async () => {
     const res = await fetch('/api/profile')
@@ -54,22 +53,6 @@ export default function AdminAboutPage() {
   }, [])
 
   useEffect(() => { fetchProfile() }, [fetchProfile])
-
-  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    const form = new FormData()
-    form.append('file', file)
-    const res = await fetch('/api/upload', { method: 'POST', body: form })
-    if (res.ok) {
-      const { url } = await res.json()
-      setProfile(prev => ({ ...prev, photoUrl: url }))
-    } else {
-      setMessage({ type: 'error', text: 'Upload failed' })
-    }
-    setUploading(false)
-  }
 
   const addSkill = () => {
     if (!newSkill.trim()) return
@@ -181,17 +164,18 @@ export default function AdminAboutPage() {
         <div className="admin-card-title">Profile Photo</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           {profile.photoUrl ? (
-            <Image src={profile.photoUrl} alt="Profile" width={100} height={100} className="image-preview" style={{ width: '100px', height: '100px', marginBottom: 0 }} />
+            <Image src={profile.photoUrl} alt="Profile" width={100} height={100} className="image-preview" style={{ width: '100px', height: '100px', margin: 0 }} />
           ) : (
             <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: 'var(--surface-elevated)', border: '2px dashed var(--admin-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px' }}>
               👤
             </div>
           )}
           <div>
-            <div className="image-upload-area" style={{ padding: '16px 24px', display: 'inline-block' }}>
-              <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoUpload} />
-              {uploading ? <span className="spinner" /> : '📁 Upload Photo'}
-            </div>
+            <ImageUploadWithCrop 
+              onUploadSuccess={(url) => setProfile(prev => ({ ...prev, photoUrl: url }))} 
+              aspectRatio={1} 
+              style={{ display: 'inline-block' }}
+            />
             {profile.photoUrl && (
               <button className="btn-danger" style={{ marginLeft: '8px', fontSize: '12px' }}
                 onClick={() => setProfile(prev => ({ ...prev, photoUrl: null }))}>

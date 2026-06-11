@@ -39,7 +39,7 @@ const emptyProject: ProjectData = {
   githubLink: '',
   date: '',
   published: true,
-  order: 0,
+  order: 1,
 }
 
 export default function ProjectFormClient({ project, isNew }: { project: unknown | null; isNew: boolean }) {
@@ -258,12 +258,6 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
               <input className="form-input" value={data.emoji}
                 onChange={e => setData(prev => ({ ...prev, emoji: e.target.value }))}
                 placeholder="💼" style={{ maxWidth: '80px' }} />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Order</label>
-              <input type="number" className="form-input" value={data.order}
-                onChange={e => setData(prev => ({ ...prev, order: parseInt(e.target.value) || 0 }))}
-                style={{ maxWidth: '100px' }} />
             </div>
             <div className="form-group">
               <label className="form-label">Status</label>

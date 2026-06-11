@@ -1314,3 +1314,119 @@ footer .footer-inner {
   animation: spin 0.7s linear infinite;
   display: inline-block;
 }
+
+/* Tech Stack Input Styles */
+.tech-stack-input-container {
+  width: 100%;
+}
+
+.tech-input-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.tech-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--rounded-md);
+  margin-top: 4px;
+  z-index: 10;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.tech-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.tech-option:last-child {
+  border-bottom: none;
+}
+
+.tech-option:hover,
+.tech-option.highlighted {
+  background-color: var(--admin-border);
+}
+
+.tech-option-name {
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tech-option-category {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 2px 6px;
+  background-color: rgba(6, 83, 182, 0.1);
+  border-radius: 2px;
+}
+
+/* Tech Tag Styles */
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background-color: rgba(6, 83, 182, 0.15);
+  border: 1px solid rgba(6, 83, 182, 0.3);
+  border-radius: var(--rounded-sm);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.tech-tag-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: var(--brand-accent);
+  flex-shrink: 0;
+}
+
+.tech-tag-name {
+  color: var(--primary);
+}
+
+.tech-tag-remove {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 2px;
+  line-height: 1;
+  transition: color 0.15s ease;
+  margin-left: 2px;
+}
+
+.tech-tag-remove:hover {
+  color: var(--danger);
+}
+
+/* Tech Option in Dropdown */
+.tech-option-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.tech-option-icon {
+  color: var(--brand-accent);
+  flex-shrink: 0;
+}

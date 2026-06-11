@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import TechStackInput from '@/components/admin/TechStackInput'
+import ImageUploadWithCrop from '@/components/admin/ImageUploadWithCrop'
 
 const LANGS = ['ja', 'en', 'ko'] as const
 type Lang = typeof LANGS[number]
@@ -62,29 +63,11 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
   })
   const [activeLang, setActiveLang] = useState<Lang>('ja')
   const [saving, setSaving] = useState(false)
-  const [uploading, setUploading] = useState(false)
   const [newTag, setNewTag] = useState('')
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const updateLang = (field: 'title' | 'description' | 'features', lang: Lang, value: string) => {
     setData(prev => ({ ...prev, [field]: { ...(prev[field] as MultiLang), [lang]: value } }))
-  }
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    const form = new FormData()
-    form.append('file', file)
-    const res = await fetch('/api/upload', { method: 'POST', body: form })
-    if (res.ok) {
-      const { url } = await res.json()
-      setData(prev => ({ ...prev, imageUrl: url }))
-    } else {
-      setMessage({ type: 'error', text: 'Image upload failed' })
-    }
-    setUploading(false)
   }
 
   const addTag = () => {
@@ -271,11 +254,11 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
                 <Image src={data.imageUrl} alt="Project" fill style={{ objectFit: 'cover' }} />
               </div>
             )}
-            <div className="image-upload-area">
-              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} />
-              <p className="body-sm">{uploading ? 'Uploading...' : '📁 Upload image'}</p>
-              <p className="body-sm">Max 5MB</p>
-            </div>
+            <ImageUploadWithCrop 
+              onUploadSuccess={(url) => setData(prev => ({ ...prev, imageUrl: url }))} 
+              aspectRatio={16 / 9} 
+              buttonText="📁 Upload image"
+            />
             {data.imageUrl && (
               <button className="btn-danger" style={{ marginTop: '8px', width: '100%', justifyContent: 'center' }}
                 onClick={() => setData(prev => ({ ...prev, imageUrl: null }))}>

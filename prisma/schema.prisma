@@ -48,6 +48,7 @@ model Project {
   tags         String[]
   emoji        String?
   imageUrl     String?
+  images       String[] @default([])
   demoLink     String?
   githubLink   String?
   date         String

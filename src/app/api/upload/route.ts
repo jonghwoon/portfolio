@@ -29,12 +29,12 @@ export async function POST(request: NextRequest) {
 
     const ext = file.name.split('.').pop()
     const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads')
+    const uploadDir = path.join(process.cwd(), 'data', 'uploads')
 
     await mkdir(uploadDir, { recursive: true })
     await writeFile(path.join(uploadDir, filename), buffer)
 
-    return NextResponse.json({ url: `/uploads/${filename}` })
+    return NextResponse.json({ url: `/api/files/${filename}` })
   } catch (error: unknown) {
     if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

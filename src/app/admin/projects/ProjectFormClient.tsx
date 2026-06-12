@@ -22,6 +22,7 @@ interface ProjectData {
   tags: string[]
   emoji: string
   imageUrl?: string | null
+  images?: string[]
   demoLink?: string | null
   githubLink?: string | null
   date: string
@@ -37,6 +38,7 @@ const emptyProject: ProjectData = {
   tags: [],
   emoji: '💼',
   imageUrl: null,
+  images: [],
   demoLink: '',
   githubLink: '',
   date: '',
@@ -246,9 +248,9 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
             </div>
           </div>
 
-          {/* Image */}
+          {/* Main Image */}
           <div className="admin-card">
-            <div className="admin-card-title">Image</div>
+            <div className="admin-card-title">Main Image</div>
             {data.imageUrl && (
               <div style={{ position: 'relative', height: '120px', marginBottom: '12px', overflow: 'hidden', borderRadius: '4px' }}>
                 <Image src={data.imageUrl} alt="Project" fill style={{ objectFit: 'cover' }} />
@@ -257,14 +259,35 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
             <ImageUploadWithCrop 
               onUploadSuccess={(url) => setData(prev => ({ ...prev, imageUrl: url }))} 
               aspectRatio={16 / 9} 
-              buttonText="📁 Upload image"
+              buttonText="📁 Upload Main Image"
             />
             {data.imageUrl && (
               <button className="btn-danger" style={{ marginTop: '8px', width: '100%', justifyContent: 'center' }}
                 onClick={() => setData(prev => ({ ...prev, imageUrl: null }))}>
-                Remove Image
+                Remove Main Image
               </button>
             )}
+          </div>
+
+          {/* Gallery Images */}
+          <div className="admin-card">
+            <div className="admin-card-title">Gallery Images</div>
+            {data.images && data.images.map((imgUrl, idx) => (
+              <div key={idx} style={{ position: 'relative', height: '80px', marginBottom: '8px', overflow: 'hidden', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ position: 'relative', width: '140px', height: '80px' }}>
+                  <Image src={imgUrl} alt={`Gallery ${idx}`} fill style={{ objectFit: 'cover' }} />
+                </div>
+                <button className="btn-danger" style={{ padding: '4px 8px' }}
+                  onClick={() => setData(prev => ({ ...prev, images: prev.images?.filter((_, i) => i !== idx) }))}>
+                  Remove
+                </button>
+              </div>
+            ))}
+            <ImageUploadWithCrop 
+              onUploadSuccess={(url) => setData(prev => ({ ...prev, images: [...(prev.images || []), url] }))} 
+              aspectRatio={16 / 9} 
+              buttonText="📁 Add Gallery Image"
+            />
           </div>
         </div>
       </div>

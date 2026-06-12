@@ -61,9 +61,12 @@ jobs:
             # postgres-db 컨테이너가 사용 중인 네트워크 이름을 자동으로 찾습니다.
             DB_NETWORK=$(docker inspect postgres-db -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}}{{end}}' | head -n 1)
 
+            # 호스트에 데이터 저장용 디렉토리 생성 (없으면 생성)
+            mkdir -p /home/ubuntu/deploy/data/uploads
+
             # 새 컨테이너 실행 (호스트의 3000번 포트로 연결)
             # DB와 같은 네트워크에 연결하고, postgres-db 컨테이너를 dev-postgres-host라는 별칭으로 부를 수 있게 연결합니다.
-            docker run -d --name portfolio-main -p 3000:8080 --network $DB_NETWORK --link postgres-db:dev-postgres-host --env-file /home/ubuntu/deploy/.env $IMAGE_URL
+            docker run -d --name portfolio-main -p 3000:8080 --network $DB_NETWORK --link postgres-db:dev-postgres-host --env-file /home/ubuntu/deploy/.env -v /home/ubuntu/deploy/data:/app/data $IMAGE_URL
 
             # 새 컨테이너 내부에서 DB 마이그레이션 실행
             docker exec portfolio-main npm run db:migrate

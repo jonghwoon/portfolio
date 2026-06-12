@@ -1,10 +1,19 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import TechTag from '@/components/TechTag'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { t } from '@/lib/i18n'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { FreeMode, Navigation, Thumbs } from 'swiper/modules'
+import type { Swiper as SwiperType } from 'swiper'
+
+import 'swiper/css'
+import 'swiper/css/free-mode'
+import 'swiper/css/navigation'
+import 'swiper/css/thumbs'
 
 interface Project {
   id: number
@@ -15,6 +24,7 @@ interface Project {
   tags: string[]
   emoji?: string | null
   imageUrl?: string | null
+  images?: string[]
   demoLink?: string | null
   githubLink?: string | null
   date: string
@@ -32,6 +42,14 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
   const { lang } = useLanguage()
   const label = labels[lang] || labels['en']
   const features = (project.features as Record<string, string[]>)?.[lang] || (project.features as Record<string, string[]>)?.['en'] || []
+  
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null)
+
+  // Combine imageUrl (main) and images (gallery) into a single array
+  const allImages = [
+    ...(project.imageUrl ? [project.imageUrl] : []),
+    ...(project.images || [])
+  ]
 
   return (
     <main>
@@ -40,9 +58,66 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
           {label.back}
         </Link>
 
-        {project.imageUrl ? (
-          <div style={{ position: 'relative', width: '100%', height: '300px', marginBottom: '32px', overflow: 'hidden' }}>
-            <Image src={project.imageUrl} alt={t(project.title, lang)} fill style={{ objectFit: 'cover' }} />
+        {allImages.length > 0 ? (
+          <div style={{ marginBottom: '32px' }}>
+            {/* Main Image Slider */}
+            <Swiper
+              style={{
+                '--swiper-navigation-color': '#fff',
+                '--swiper-pagination-color': '#fff',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                marginBottom: '10px'
+              } as React.CSSProperties}
+              spaceBetween={10}
+              navigation={true}
+              thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+              modules={[FreeMode, Navigation, Thumbs]}
+              className="mySwiper2"
+            >
+              {allImages.map((src, index) => (
+                <SwiperSlide key={index}>
+                  <div style={{ position: 'relative', width: '100%', height: '400px' }}>
+                    <Image src={src} alt={`${t(project.title, lang)} ${index + 1}`} fill style={{ objectFit: 'cover' }} />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+
+            {/* Thumbnail Slider */}
+            {allImages.length > 1 && (
+              <Swiper
+                onSwiper={setThumbsSwiper}
+                spaceBetween={10}
+                slidesPerView={4}
+                freeMode={true}
+                watchSlidesProgress={true}
+                modules={[FreeMode, Navigation, Thumbs]}
+                className="mySwiper"
+                style={{ height: '80px', borderRadius: '4px', overflow: 'hidden' }}
+              >
+                {allImages.map((src, index) => (
+                  <SwiperSlide key={`thumb-${index}`} style={{ cursor: 'pointer', opacity: 0.6 }} className="swiper-slide-thumb-active">
+                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                      <Image src={src} alt={`Thumbnail ${index + 1}`} fill style={{ objectFit: 'cover', borderRadius: '4px' }} />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
+            
+            <style jsx global>{`
+              .mySwiper .swiper-slide-thumb-active {
+                opacity: 1 !important;
+                border: 2px solid var(--accent-color, #0070f3);
+              }
+              .mySwiper .swiper-slide {
+                transition: opacity 0.2s;
+              }
+              .mySwiper .swiper-slide:hover {
+                opacity: 0.8 !important;
+              }
+            `}</style>
           </div>
         ) : (
           <div className="project-hero-emoji">{project.emoji || '💼'}</div>

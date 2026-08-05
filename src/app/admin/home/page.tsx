@@ -40,15 +40,16 @@ export default function AdminHomePage() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
-  const fetchData = useCallback(async () => {
-    const res = await fetch('/api/home')
-    if (res.ok) {
-      const json = await res.json()
-      if (json) setData(json)
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch('/api/home')
+      if (res.ok) {
+        const json = await res.json()
+        if (json) setData(json)
+      }
     }
+    fetchData()
   }, [])
-
-  useEffect(() => { fetchData() }, [fetchData])
 
   const updateField = (field: keyof HomeData, lang: Lang, value: string) => {
     setData(prev => ({

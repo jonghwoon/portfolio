@@ -53,7 +53,6 @@ import {
   faEnvelope,
   faLeaf,
   faMobileScreen,
-  faCode,
 } from '@fortawesome/free-solid-svg-icons'
 
 export interface TechStack {

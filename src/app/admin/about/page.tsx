@@ -44,15 +44,16 @@ export default function AdminAboutPage() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [newSkill, setNewSkill] = useState('')
 
-  const fetchProfile = useCallback(async () => {
-    const res = await fetch('/api/profile')
-    if (res.ok) {
-      const data = await res.json()
-      if (data) setProfile(data)
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const res = await fetch('/api/profile')
+      if (res.ok) {
+        const data = await res.json()
+        if (data) setProfile(data)
+      }
     }
+    fetchProfile()
   }, [])
-
-  useEffect(() => { fetchProfile() }, [fetchProfile])
 
   const addSkill = () => {
     if (!newSkill.trim()) return

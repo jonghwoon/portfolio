@@ -13,16 +13,11 @@ interface TechStackInputProps {
 export default function TechStackInput({ value, onChange }: TechStackInputProps) {
   const [inputValue, setInputValue] = useState('')
   const [showDropdown, setShowDropdown] = useState(false)
-  const [filteredTechs, setFilteredTechs] = useState(TECH_STACKS)
   const [highlightedIndex, setHighlightedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const filtered = filterTechs(inputValue)
-    setFilteredTechs(filtered)
-    setHighlightedIndex(0)
-  }, [inputValue])
+  const filteredTechs = filterTechs(inputValue)
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -80,6 +75,7 @@ export default function TechStackInput({ value, onChange }: TechStackInputProps)
             value={inputValue}
             onChange={e => {
               setInputValue(e.target.value)
+              setHighlightedIndex(0)
               setShowDropdown(true)
             }}
             onFocus={() => setShowDropdown(true)}

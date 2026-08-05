@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { TECH_STACKS, filterTechs, getTechByName } from '@/lib/techStacks'
+import { filterTechs } from '@/lib/techStacks'
 import TechTag from '../TechTag'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 

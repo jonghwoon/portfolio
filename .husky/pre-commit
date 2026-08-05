@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔎 커밋 전 린트(Lint) 및 타입 검사(Typecheck)를 시작합니다..."
+
+# 타입 검사 실행
+npm run typecheck
+if [ $? -ne 0 ]; then
+  echo "❌ 타입 검사 실패! TypeScript 에러를 먼저 해결해주세요."
+  exit 1
+fi
+
+# 린트 실행
+npm run lint
+if [ $? -ne 0 ]; then
+  echo "❌ 린트 실패! 코드 스타일 에러를 먼저 해결해주세요."
+  exit 1
+fi
+
+echo "✅ 커밋 검사 통과!"

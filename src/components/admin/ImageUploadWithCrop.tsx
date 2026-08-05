@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useRef } from 'react'
 import Cropper from 'react-easy-crop'
+import 'react-easy-crop/react-easy-crop.css'
 import getCroppedImg from '@/lib/cropImage'
 
 interface ImageUploadWithCropProps {
@@ -10,6 +11,35 @@ interface ImageUploadWithCropProps {
   buttonText?: string
   className?: string
   style?: React.CSSProperties
+  useCrop?: boolean
+}
+
+const resizeImage = (file: File, maxWidth: number): Promise<File> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => {
+      if (img.width <= maxWidth) {
+        resolve(file)
+        return
+      }
+      const scale = maxWidth / img.width
+      const canvas = document.createElement('canvas')
+      canvas.width = maxWidth
+      canvas.height = img.height * scale
+      const ctx = canvas.getContext('2d')
+      ctx?.drawImage(img, 0, 0, canvas.width, canvas.height)
+      
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(new File([blob], file.name, { type: file.type }))
+        } else {
+          reject(new Error('Canvas to Blob failed'))
+        }
+      }, file.type, 0.9)
+    }
+    img.onerror = reject
+    img.src = URL.createObjectURL(file)
+  })
 }
 
 export default function ImageUploadWithCrop({
@@ -18,6 +48,7 @@ export default function ImageUploadWithCrop({
   buttonText = '📁 Upload Photo',
   className = 'image-upload-area',
   style,
+  useCrop = true,
 }: ImageUploadWithCropProps) {
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [crop, setCrop] = useState({ x: 0, y: 0 })
@@ -30,14 +61,38 @@ export default function ImageUploadWithCrop({
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
-      const reader = new FileReader()
-      reader.addEventListener('load', () => {
-        setImageSrc(reader.result?.toString() || null)
-      })
-      reader.readAsDataURL(file)
-      // clear the input so the same file can be selected again
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
+      
+      if (useCrop) {
+        const reader = new FileReader()
+        reader.addEventListener('load', () => {
+          setImageSrc(reader.result?.toString() || null)
+        })
+        reader.readAsDataURL(file)
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''
+        }
+      } else {
+        // Upload with proportional scaling if too large
+        setUploading(true)
+        try {
+          const resizedFile = await resizeImage(file, 1920)
+          const form = new FormData()
+          form.append('file', resizedFile)
+
+          const res = await fetch('/api/upload', { method: 'POST', body: form })
+          if (!res.ok) throw new Error('Upload failed')
+          
+          const { url } = await res.json()
+          onUploadSuccess(url)
+        } catch (error) {
+          console.error(error)
+          alert('Image upload failed.')
+        } finally {
+          setUploading(false)
+          if (fileInputRef.current) {
+            fileInputRef.current.value = ''
+          }
+        }
       }
     }
   }
@@ -46,8 +101,11 @@ export default function ImageUploadWithCrop({
     setCroppedAreaPixels(croppedAreaPixels)
   }, [])
 
-  const handleUpload = async () => {
-    if (!imageSrc || !croppedAreaPixels) return
+  const handleUploadCropped = async () => {
+    if (!imageSrc || !croppedAreaPixels) {
+      alert('Crop area is not selected properly. Please try again.')
+      return
+    }
 
     setUploading(true)
     try {
@@ -63,7 +121,6 @@ export default function ImageUploadWithCrop({
       const { url } = await res.json()
       onUploadSuccess(url)
       
-      // Close modal
       setImageSrc(null)
     } catch (e) {
       console.error(e)
@@ -80,7 +137,7 @@ export default function ImageUploadWithCrop({
         {uploading ? <span className="spinner" /> : buttonText}
       </div>
 
-      {imageSrc && (
+      {useCrop && imageSrc && (
         <div className="cropper-modal-overlay">
           <div className="cropper-modal">
             <div className="cropper-header">
@@ -114,7 +171,7 @@ export default function ImageUploadWithCrop({
             </div>
 
             <div className="cropper-footer">
-              <button className="btn-admin-primary" onClick={handleUpload} disabled={uploading}>
+              <button className="btn-admin-primary" onClick={handleUploadCropped} disabled={uploading}>
                 {uploading ? 'Uploading...' : 'Confirm & Upload'}
               </button>
             </div>

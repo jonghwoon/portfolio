@@ -257,6 +257,7 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
               </div>
             )}
             <ImageUploadWithCrop 
+              useCrop={false}
               onUploadSuccess={(url) => setData(prev => ({ ...prev, imageUrl: url }))} 
               aspectRatio={16 / 9} 
               buttonText="📁 Upload Main Image"
@@ -284,6 +285,7 @@ export default function ProjectFormClient({ project, isNew }: { project: unknown
               </div>
             ))}
             <ImageUploadWithCrop 
+              useCrop={false}
               onUploadSuccess={(url) => setData(prev => ({ ...prev, images: [...(prev.images || []), url] }))} 
               aspectRatio={16 / 9} 
               buttonText="📁 Add Gallery Image"

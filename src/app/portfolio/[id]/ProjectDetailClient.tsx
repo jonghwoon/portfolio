@@ -44,6 +44,13 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
   const features = (project.features as Record<string, string[]>)?.[lang] || (project.features as Record<string, string[]>)?.['en'] || []
   
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalImageSrc, setModalImageSrc] = useState<string | null>(null)
+
+  const handleImageClick = (src: string) => {
+    setModalImageSrc(src)
+    setIsModalOpen(true)
+  }
 
   // Combine imageUrl (main) and images (gallery) into a single array
   const allImages = [
@@ -77,7 +84,10 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
             >
               {allImages.map((src, index) => (
                 <SwiperSlide key={index}>
-                  <div style={{ position: 'relative', width: '100%', height: '400px' }}>
+                  <div 
+                    style={{ position: 'relative', width: '100%', height: '400px', cursor: 'pointer' }}
+                    onClick={() => handleImageClick(src)}
+                  >
                     <Image src={src} alt={`${t(project.title, lang)} ${index + 1}`} fill style={{ objectFit: 'cover' }} />
                   </div>
                 </SwiperSlide>
@@ -97,7 +107,7 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
                 style={{ height: '80px', borderRadius: '4px', overflow: 'hidden' }}
               >
                 {allImages.map((src, index) => (
-                  <SwiperSlide key={`thumb-${index}`} style={{ cursor: 'pointer', opacity: 0.6 }} className="swiper-slide-thumb-active">
+                  <SwiperSlide key={`thumb-${index}`} style={{ cursor: 'pointer' }}>
                     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                       <Image src={src} alt={`Thumbnail ${index + 1}`} fill style={{ objectFit: 'cover', borderRadius: '4px' }} />
                     </div>
@@ -113,6 +123,7 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
               }
               .mySwiper .swiper-slide {
                 transition: opacity 0.2s;
+                opacity: 0.6;
               }
               .mySwiper .swiper-slide:hover {
                 opacity: 0.8 !important;
@@ -180,6 +191,57 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
           </div>
         )}
       </div>
+
+      {/* Image Modal */}
+      {isModalOpen && modalImageSrc && (
+        <div 
+          className="image-modal-overlay animate-fade-in" 
+          onClick={() => setIsModalOpen(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            zIndex: 9999,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            cursor: 'zoom-out'
+          }}
+        >
+          <img 
+            src={modalImageSrc} 
+            alt="Expanded image" 
+            style={{ 
+              maxWidth: '95vw', 
+              maxHeight: '95vh', 
+              objectFit: 'contain',
+              borderRadius: '8px',
+              boxShadow: '0 4px 32px rgba(0,0,0,0.5)'
+            }} 
+          />
+          <button 
+            onClick={() => setIsModalOpen(false)}
+            style={{
+              position: 'absolute',
+              top: '24px',
+              right: '24px',
+              background: 'none',
+              border: 'none',
+              color: 'white',
+              fontSize: '48px',
+              cursor: 'pointer',
+              zIndex: 10000,
+              lineHeight: 1
+            }}
+            aria-label="Close modal"
+          >
+            &times;
+          </button>
+        </div>
+      )}
     </main>
   )
 }

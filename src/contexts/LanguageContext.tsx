@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import React, { createContext, useContext, useSyncExternalStore, ReactNode } from 'react'
 import { Language, defaultLang } from '@/lib/i18n'
 
 interface LanguageContextType {
@@ -13,19 +13,33 @@ const LanguageContext = createContext<LanguageContextType>({
   setLang: () => {},
 })
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Language>(defaultLang)
+function subscribe(callback: () => void) {
+  window.addEventListener('storage', callback)
+  window.addEventListener('languagechange_custom', callback)
+  return () => {
+    window.removeEventListener('storage', callback)
+    window.removeEventListener('languagechange_custom', callback)
+  }
+}
 
-  useEffect(() => {
-    const stored = localStorage.getItem('language') as Language | null
-    if (stored && ['ja', 'en', 'ko'].includes(stored)) {
-      setLangState(stored)
-    }
-  }, [])
+function getSnapshot(): Language {
+  const stored = localStorage.getItem('language') as Language | null
+  if (stored && ['ja', 'en', 'ko'].includes(stored)) {
+    return stored
+  }
+  return defaultLang
+}
+
+function getServerSnapshot(): Language {
+  return defaultLang
+}
+
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const lang = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
   const setLang = (newLang: Language) => {
-    setLangState(newLang)
     localStorage.setItem('language', newLang)
+    window.dispatchEvent(new Event('languagechange_custom'))
   }
 
   return (

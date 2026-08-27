@@ -211,6 +211,7 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
             cursor: 'zoom-out'
           }}
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
             src={modalImageSrc} 
             alt="Expanded image" 

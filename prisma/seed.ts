@@ -282,10 +282,15 @@ async function main() {
     },
   ]
 
-  for (const p of projects) {
-    await prisma.project.create({ data: p })
+  const existingProjectCount = await prisma.project.count()
+  if (existingProjectCount === 0) {
+    for (const p of projects) {
+      await prisma.project.create({ data: p })
+    }
+    console.log('✅ Projects initialized')
+  } else {
+    console.log(`⏭️ Projects already exist (${existingProjectCount}), skipping seed`)
   }
-  console.log('✅ Projects initialized')
 }
 
 main()

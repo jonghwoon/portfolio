@@ -1038,6 +1038,12 @@ footer .footer-inner {
   border: 1px solid rgba(126, 126, 126, 0.3);
 }
 
+.badge-danger {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
 /* Stats Grid */
 .stats-grid {
   display: grid;

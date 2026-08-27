@@ -7,6 +7,7 @@ export default async function AdminDashboard() {
   let publishedCount = 0
   let hasProfile = false
   let hasHome = false
+  let dbError = false
 
   try {
     projectCount = await prisma.project.count()
@@ -14,7 +15,7 @@ export default async function AdminDashboard() {
     hasProfile = !!(await prisma.profile.findUnique({ where: { id: 1 } }))
     hasHome = !!(await prisma.homeContent.findUnique({ where: { id: 1 } }))
   } catch {
-    // DB not yet connected
+    dbError = true
   }
 
   return (
@@ -26,6 +27,12 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
+      {dbError && (
+        <div className="error-message" style={{ marginBottom: '16px' }}>
+          ⚠️ Database connection failed. The information below may not be accurate.
+        </div>
+      )}
+
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-value">{projectCount}</div>
@@ -36,14 +43,14 @@ export default async function AdminDashboard() {
           <div className="stat-label">Published</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value" style={{ color: hasProfile ? 'var(--success)' : 'var(--warning)' }}>
-            {hasProfile ? '✓' : '!'}
+          <div className="stat-value" style={{ color: dbError ? 'var(--danger)' : hasProfile ? 'var(--success)' : 'var(--warning)' }}>
+            {dbError ? '✕' : hasProfile ? '✓' : '!'}
           </div>
           <div className="stat-label">Profile Status</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value" style={{ color: hasHome ? 'var(--success)' : 'var(--warning)' }}>
-            {hasHome ? '✓' : '!'}
+          <div className="stat-value" style={{ color: dbError ? 'var(--danger)' : hasHome ? 'var(--success)' : 'var(--warning)' }}>
+            {dbError ? '✕' : hasHome ? '✓' : '!'}
           </div>
           <div className="stat-label">Home Status</div>
         </div>
@@ -73,20 +80,20 @@ export default async function AdminDashboard() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: '14px', color: 'var(--body)' }}>Home Content</span>
-              <span className={`badge ${hasHome ? 'badge-success' : 'badge-muted'}`}>
-                {hasHome ? 'Ready' : 'Not set'}
+              <span className={`badge ${dbError ? 'badge-danger' : hasHome ? 'badge-success' : 'badge-muted'}`}>
+                {dbError ? 'DB Error' : hasHome ? 'Ready' : 'Not set'}
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: '14px', color: 'var(--body)' }}>Profile</span>
-              <span className={`badge ${hasProfile ? 'badge-success' : 'badge-muted'}`}>
-                {hasProfile ? 'Ready' : 'Not set'}
+              <span className={`badge ${dbError ? 'badge-danger' : hasProfile ? 'badge-success' : 'badge-muted'}`}>
+                {dbError ? 'DB Error' : hasProfile ? 'Ready' : 'Not set'}
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: '14px', color: 'var(--body)' }}>Projects</span>
-              <span className={`badge ${projectCount > 0 ? 'badge-success' : 'badge-muted'}`}>
-                {projectCount > 0 ? `${projectCount} total` : 'Empty'}
+              <span className={`badge ${dbError ? 'badge-danger' : projectCount > 0 ? 'badge-success' : 'badge-muted'}`}>
+                {dbError ? 'DB Error' : projectCount > 0 ? `${projectCount} total` : 'Empty'}
               </span>
             </div>
           </div>
